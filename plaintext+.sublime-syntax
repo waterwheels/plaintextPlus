@@ -1,0 +1,58 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/3/syntax.html
+name: plaintext+
+file_extensions: [txt]
+scope: text.plain.txt
+contexts:
+  main:
+    # Headings
+    - match: '::'
+      push:
+        - meta_scope: markup.heading
+        - match: '$\n?'
+          pop: true
+
+    # Separators
+    - match: '^[*=-]{3,}$'
+      push:
+        - meta_scope: meta.separator
+        - match: '$\n?'
+          pop: true
+
+    # Links, filenames, etc
+    - match: '(?:https?\:\/\/)?(?:\w+[.@])+(?:\w+[.\/\-\?\=+@])+(?:\w+\/?)'
+      push:
+        - meta_scope: string.other.link
+        - match: '\s'
+          pop: true
+
+
+    # Special chars
+    - match: '[+\-\/\*<>&%$#@=!]'
+      scope: txt.plain.txt.operator
+
+    # Punctuation
+    - match: '[\(\)]'
+      scope: text.plain.txt.punctuation
+
+    # Numbers
+    - match: '\b(0x|0b)?\d+[a-zA-Z]?'
+      scope: constant.numeric
+
+    # caps
+    - match: '[A-Z_]{2,}'
+      scope: text.plain.txt.caps
+
+    # file extentions
+    - match: '\s\.[\.\w]+'
+      scope: text.plain.txt.file_extensions
+
+
+    # Words surrounded by *
+    - match: '(\*)(\w+)(\*)'
+      captures:
+        1: punctuation.definition.bold.begin
+        2: markup.bold
+        3: punctuation.definition.bold.end
+  
